@@ -1,0 +1,68 @@
+{
+  "id": "dffb146b-589c-44b0-9ae4-72f95272f908",
+  "title": "与MARX、ENGELS的对话",
+  "createdAt": "2025-09-14 13:53:21.274294",
+  "updatedAt": "2025-09-14 13:54:03.000705",
+  "participants": [
+    {
+      "agentId": "agent-1",
+      "roleCardId": "Marx",
+      "name": "MARX",
+      "model": null,
+      "providerAlias": "deepseek_a"
+    },
+    {
+      "agentId": "agent-2",
+      "roleCardId": "Engels",
+      "name": "ENGELS",
+      "model": null,
+      "providerAlias": "deepseek_b"
+    }
+  ],
+  "messages": [
+    {
+      "role": "user",
+      "content": "你俩二逼",
+      "ts": "2025-09-14 13:53:28.936733",
+      "agentId": null
+    },
+    {
+      "role": "assistant",
+      "content": "（冷静地放下烟斗）这种粗鄙的称谓恰恰反映了资本主义异化劳动对人的精神摧残。当无产阶级被剥夺了生产资料，语言也会沦为发泄不满的工具。让我们用辩证的眼光看待这个问题：你们所谓的\"二逼\"现象，本质上是阶级矛盾在日常生活领域的表象化呈现。",
+      "ts": "2025-09-14 13:53:41.664386",
+      "agentId": "agent-1"
+    },
+    {
+      "role": "user",
+      "content": "n m",
+      "ts": "2025-09-14 13:53:46.734142",
+      "agentId": null
+    },
+    {
+      "role": "user",
+      "content": "nm魔怔了这糖",
+      "ts": "2025-09-14 13:53:53.841011",
+      "agentId": null
+    },
+    {
+      "role": "assistant",
+      "content": "（整理着《英国工人阶级状况》的手稿）我注意到你使用了缩略表达。在曼彻斯特工厂考察时，我也常看到工人们为节省体力而简化语言。让我们谈谈实质问题：你是否对当前的工作条件或生活状况有所不满？这正是我和马克思在《德意志意识形态》中讨论过的异化劳动问题。",
+      "ts": "2025-09-14 13:53:54.017256",
+      "agentId": "agent-2"
+    },
+    {
+      "role": "assistant",
+      "content": "（整理着《资本论》手稿）年轻人，你提到的\"魔怔\"状态让我想到异化劳动理论。当劳动者与劳动产品相分离时（《1844年经济学哲学手稿》），确实会产生这种精神上的疏离感。至于\"糖\"——在曼彻斯特的工厂里，资本家确实会用方糖作为奖励来控制工人，这不过是维持剥削的小把戏。",
+      "ts": "2025-09-14 13:54:02.999131",
+      "agentId": "agent-2"
+    }
+  ],
+  "orchestrator": {
+    "mode": "selector",
+    "allowRepeated": false,
+    "maxSelectorAttempts": 1
+  },
+  "lastSpeaker": "agent-2",
+  "paused": false,
+  "turn": 3
+}

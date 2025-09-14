@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>本地聊天 · Philohumanities-AI</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <meta name="color-scheme" content="light dark" />
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <style>
+    /* Fallback minimal styles if CSS fails to load */
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>本地聊天</h1>
+      <div class="actions">
+        <button id="newChatBtn" title="开始新会话">新会话</button>
+        <button id="clearChatBtn" title="删除当前会话">删除当前会话</button>
+      </div>
+    </header>
+
+    <section class="chat" id="chat">
+      <aside class="sidebar" id="sidebar">
+        
+        <div id="button-div" style="display:flex;gap:8px;margin-bottom:8px;align-items: center;vertical-align: middle;">
+          <button id="toggleSidebar" class="toggle-sidebar-btn" >&lt</button>
+          <p class="sidebar-title" style="padding-left: 15px; vertical-text-align: middle;">会话列表</p>
+          <button class="ChatBtn" id="singleChatBtn">私聊</button>
+          <button class="ChatBtn" id="multiChatBtn">群聊</button>
+        </div>
+        <div id="single-panel">
+          <h2 id="single-title">私聊</h2>
+          <div id="single-history-list"></div>
+          <ul id="singleconversationList"></ul>
+        </div>
+        <div id="multi-panel" style="display:none;">
+          <h2 id="multi-title">群聊</h2>
+          <div id="multi-history-list">
+            <ul id="multiconversationList"></ul>
+          </div>
+        </div>
+      </aside>
+      <main class="chat-main" id="chat-main">
+        <div id="messages" class="messages"></div>
+        <div id="groupControls" class="group-controls hidden">
+          <button id="autoRunBtn" type="button" class="secondary">自动续聊：开</button>
+          <button id="wantSpeakBtn" type="button" class="secondary">我要说话</button>
+          <button id="pauseBtn" type="button" class="secondary">暂停</button>
+        </div>
+        <form id="composer" class="composer">
+          <div id="suggestionsPanel" class="suggestions-panel hidden"></div>
+          <textarea id="input" rows="3" placeholder="输入你的问题... (Shift+Enter 换行)"></textarea>
+          <div class="composer-actions">
+            <button id="suggestBtn" type="button" title="AI小智囊">AI小智囊</button>
+            <input id="model" placeholder="模型 (可选)" />
+            <button id="sendBtn" type="submit">发送</button>
+          </div>
+        </form>
+      </main>
+    </section>
+
+    <footer class="footer">
+      <small>历史记录保存在服务器本地文件夹（项目 data/）。</small>
+    </footer>
+  </div>
+  <!-- 新会话：类型选择弹窗 -->
+  <div id="typeModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="typeModalTitle">
+    <div class="modal-card">
+      <h3 id="typeModalTitle" style="text-align: center;">选择对话类型</h3>
+      <div class="modal-actions" style="justify-content: center; gap: 16px;">
+        <button id="choosePrivateBtn" class="primary">私聊</button>
+        <button id="chooseGroupBtn" class="primary">群聊</button>
+      </div>
+      <button class="modal-close" data-close="typeModal" aria-label="关闭">×</button>
+    </div>
+  </div>
+
+  <!-- 角色选择弹窗（私聊） -->
+  <div id="roleModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="roleModalTitle">
+    <div class="modal-card wide">
+      <h3 id="roleModalTitle">选择一个角色</h3>
+      <div id="roleGrid" class="role-grid"></div>
+      <div class="modal-actions">
+        <button class="secondary" data-close="roleModal">返回</button>
+      </div>
+      <button class="modal-close" data-close="roleModal" aria-label="关闭">×</button>
+    </div>
+  </div>
+
+  <!-- 确认弹窗 -->
+  <div id="confirmModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+    <div class="modal-card">
+      <h3 id="confirmModalTitle">确认新会话</h3>
+      <p id="confirmText"></p>
+      <div class="modal-actions">
+        <button id="confirmCreateBtn" class="primary">确定</button>
+        <button class="secondary" data-close="confirmModal">返回</button>
+      </div>
+      <button class="modal-close" data-close="confirmModal" aria-label="关闭">×</button>
+    </div>
+  </div>
+  <!-- 群聊：多选角色弹窗 -->
+  <div id="groupRoleModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="groupRoleModalTitle">
+    <div class="modal-card wide">
+      <h3 id="groupRoleModalTitle">选择参与者（1-3人）</h3>
+      <div id="groupRoleGrid" class="role-grid"></div>
+      <div class="modal-actions">
+        <button class="secondary" data-close="groupRoleModal">返回</button>
+        <button id="confirmGroupCreateBtn" class="primary">确认创建群聊</button>
+      </div>
+      <button class="modal-close" data-close="groupRoleModal" aria-label="关闭">×</button>
+    </div>
+  </div>
+  <script src="/app.js"></script>
+</body>
+
+</html>

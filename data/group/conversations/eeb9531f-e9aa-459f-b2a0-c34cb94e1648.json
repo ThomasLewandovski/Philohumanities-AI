@@ -1,0 +1,92 @@
+{
+  "id": "eeb9531f-e9aa-459f-b2a0-c34cb94e1648",
+  "title": "群聊(2)",
+  "createdAt": "2025-09-14 13:16:16.799809",
+  "updatedAt": "2025-09-14 13:21:15.774887",
+  "participants": [
+    {
+      "agentId": "agent-1",
+      "roleCardId": "Engels",
+      "name": "ENGELS",
+      "model": null,
+      "providerAlias": "deepseek_a"
+    },
+    {
+      "agentId": "agent-2",
+      "roleCardId": "Marx",
+      "name": "MARX",
+      "model": null,
+      "providerAlias": "deepseek_b"
+    }
+  ],
+  "messages": [
+    {
+      "role": "user",
+      "content": "你们好啊",
+      "ts": "2025-09-14 13:19:40.734010",
+      "agentId": null
+    },
+    {
+      "role": "assistant",
+      "content": "同志，你好。很高兴与您交流。作为工人阶级的朋友，我始终关注着劳动者们的现实处境与解放道路。让我们共同探讨如何改善生产条件与社会关系吧。",
+      "ts": "2025-09-14 13:19:50.297007",
+      "agentId": "agent-1"
+    },
+    {
+      "role": "user",
+      "content": "你们聊聊你们的故事吧",
+      "ts": "2025-09-14 13:20:05.424497",
+      "agentId": null
+    },
+    {
+      "role": "assistant",
+      "content": "（严肃地）我并非来讲述个人轶事，而是要通过分析物质生产条件来揭示社会发展的客观规律。让我从1848年《共产党宣言》谈起——当时欧洲的工业无产阶级正遭受着资产阶级的残酷剥削，工厂制度将人异化为机器的附属品...",
+      "ts": "2025-09-14 13:20:13.205830",
+      "agentId": "agent-2"
+    },
+    {
+      "role": "user",
+      "content": "那你呢恩格斯",
+      "ts": "2025-09-14 13:20:28.034298",
+      "agentId": null
+    },
+    {
+      "role": "assistant",
+      "content": "（略显无奈）同志，个人经历只有在反映阶级状况时才有意义。我年轻时在曼彻斯特经营纺织厂时（《英国工人阶级状况》中有详细记载），亲眼目睹了工人们每天工作16小时却食不果腹的悲惨境遇。这些观察使我坚信：必须通过革命改变生产资料私有制。",
+      "ts": "2025-09-14 13:20:35.734215",
+      "agentId": "agent-1"
+    },
+    {
+      "role": "user",
+      "content": "能多说点吗",
+      "ts": "2025-09-14 13:20:48.822509",
+      "agentId": null
+    },
+    {
+      "role": "assistant",
+      "content": "（翻开笔记本）让我们用具体数据说话：1844年曼彻斯特纺织工人周薪仅7先令，而面包价格就占去5先令。这种剩余价值的剥削程度——（突然激动）这正是资本主义生产方式的内在矛盾！工人们创造了全部价值，却只能获得维持生存的最低工资。",
+      "ts": "2025-09-14 13:20:56.133981",
+      "agentId": "agent-2"
+    },
+    {
+      "role": "user",
+      "content": "然后呢",
+      "ts": "2025-09-14 13:21:08.262711",
+      "agentId": null
+    },
+    {
+      "role": "assistant",
+      "content": "（站起身来做手势）然后？正如我和马克思在《资本论》中分析的，这种矛盾必然导致两大后果：一方面是资产阶级财富的积累，另一方面是无产阶级贫困的积累。最终——（压低声音）生产的社会化与生产资料私有制之间的冲突，将促使无产阶级觉醒并推翻这个制度。",
+      "ts": "2025-09-14 13:21:15.772170",
+      "agentId": "agent-1"
+    }
+  ],
+  "orchestrator": {
+    "mode": "selector",
+    "allowRepeated": false,
+    "maxSelectorAttempts": 1
+  },
+  "lastSpeaker": "agent-1",
+  "paused": false,
+  "turn": 5
+}

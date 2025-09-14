@@ -1,0 +1,4 @@
+# Python 字节码缓存
+__pycache__/
+# 本地历史记录
+data/

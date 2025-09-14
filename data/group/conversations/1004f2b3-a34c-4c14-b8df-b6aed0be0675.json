@@ -1,0 +1,24 @@
+{
+  "id": "1004f2b3-a34c-4c14-b8df-b6aed0be0675",
+  "title": "群聊(1)",
+  "createdAt": "2025-09-14 13:16:12.482980",
+  "updatedAt": "2025-09-14 13:16:12.482980",
+  "participants": [
+    {
+      "agentId": "agent-1",
+      "roleCardId": "Marx",
+      "name": "MARX",
+      "model": null,
+      "providerAlias": "deepseek_a"
+    }
+  ],
+  "messages": [],
+  "orchestrator": {
+    "mode": "selector",
+    "allowRepeated": false,
+    "maxSelectorAttempts": 1
+  },
+  "lastSpeaker": null,
+  "paused": false,
+  "turn": 0
+}

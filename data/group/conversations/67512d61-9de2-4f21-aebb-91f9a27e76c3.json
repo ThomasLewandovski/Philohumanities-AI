@@ -1,0 +1,31 @@
+{
+  "id": "67512d61-9de2-4f21-aebb-91f9a27e76c3",
+  "title": "群聊(2)",
+  "createdAt": "2025-09-14 13:11:59.683484",
+  "updatedAt": "2025-09-14 13:11:59.683484",
+  "participants": [
+    {
+      "agentId": "agent-1",
+      "roleCardId": "Engels",
+      "name": "ENGELS",
+      "model": null,
+      "providerAlias": "deepseek_a"
+    },
+    {
+      "agentId": "agent-2",
+      "roleCardId": "Marx",
+      "name": "MARX",
+      "model": null,
+      "providerAlias": "deepseek_b"
+    }
+  ],
+  "messages": [],
+  "orchestrator": {
+    "mode": "selector",
+    "allowRepeated": false,
+    "maxSelectorAttempts": 1
+  },
+  "lastSpeaker": null,
+  "paused": false,
+  "turn": 0
+}

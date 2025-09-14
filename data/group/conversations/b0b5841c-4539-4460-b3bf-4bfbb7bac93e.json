@@ -1,0 +1,31 @@
+{
+  "id": "b0b5841c-4539-4460-b3bf-4bfbb7bac93e",
+  "title": "与MARX、ENGELS的对话",
+  "createdAt": "2025-09-14 14:14:26.935974",
+  "updatedAt": "2025-09-14 14:14:26.935974",
+  "participants": [
+    {
+      "agentId": "agent-1",
+      "roleCardId": "Marx",
+      "name": "MARX",
+      "model": null,
+      "providerAlias": "deepseek_a"
+    },
+    {
+      "agentId": "agent-2",
+      "roleCardId": "Engels",
+      "name": "ENGELS",
+      "model": null,
+      "providerAlias": "deepseek_b"
+    }
+  ],
+  "messages": [],
+  "orchestrator": {
+    "mode": "selector",
+    "allowRepeated": false,
+    "maxSelectorAttempts": 1
+  },
+  "lastSpeaker": null,
+  "paused": false,
+  "turn": 0
+}

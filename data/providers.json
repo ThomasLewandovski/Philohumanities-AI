@@ -1,0 +1,25 @@
+{
+  "accounts": [
+    {
+      "alias": "deepseek_a",
+      "base_url": "https://api.deepseek.com",
+      "api_key": "sk-c946bb6568a14a448f67600bdf75c2fa",
+      "default_model": "deepseek-chat",
+      "priority": 20
+    },
+    {
+      "alias": "deepseek_b",
+      "base_url": "https://api.deepseek.com",
+      "api_key": "sk-6ab18b8ca173407d8f589c681c4eb8e3",
+      "default_model": "deepseek-chat",
+      "priority": 19
+    },
+    {
+      "alias": "deepseek_c",
+      "base_url": "https://api.deepseek.com",
+      "api_key": "sk-211830f69ae940098b88ad314fef623a",
+      "default_model": "deepseek-chat",
+      "priority": 18
+    }
+  ]
+}

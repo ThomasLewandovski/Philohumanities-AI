@@ -1,0 +1,265 @@
+{
+  "befcbb9c90040604e2be4e5a": {
+    "suggestions": [
+      {
+        "text": "您能否举例说明当前技术变革如何具体影响工人阶级的家庭结构？",
+        "angle": "举例"
+      },
+      {
+        "text": "在《家庭、私有制和国家的起源》中，您如何分析现代家庭与私有制的关系？",
+        "angle": "引用追问"
+      },
+      {
+        "text": "从历史唯物主义视角，如何将您对生产方式的论述应用到今日零工经济的实践中？",
+        "angle": "联系现实"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  },
+  "8cd9c2957cf8a83f4eb102a4": {
+    "suggestions": [
+      {
+        "text": "您能否具体说明零工经济中的哪些方面（如算法管理或收入不稳定）最需要从生产方式角度分析？",
+        "angle": "clarify"
+      },
+      {
+        "text": "以网约车平台为例，其算法控制如何体现了资本对劳动过程的强化剥削？ 这与马克思描述的工厂纪律有何异同？",
+        "angle": "example"
+      },
+      {
+        "text": "零工劳动者缺乏集体谈判权是否印证了《资本论》中关于‘工人分散化利于资本统治’的论断？ 我们如何推动新型工会斗争？",
+        "angle": "challenge"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  },
+  "21efa0bf8289e281387e9de7": {
+    "suggestions": [
+      {
+        "text": "您能否举例说明零工经济中剩余价值的具体计算方式？",
+        "angle": "clarify"
+      },
+      {
+        "text": "跨国零工联盟面临哪些现实障碍？ 如何克服？",
+        "angle": "challenge"
+      },
+      {
+        "text": "对比工厂时代与零工时代，劳动异化有何新特征？",
+        "angle": "contrast"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  },
+  "8eab21ffc9307546d7890577": {
+    "suggestions": [
+      {
+        "text": "您能否举例说明平台算法如何具体体现剩余价值剥削？",
+        "angle": "ask-example"
+      },
+      {
+        "text": "我注意到您提到跨国联盟，但零工劳动者分散且缺乏传统工会基础，如何克服组织障碍？",
+        "angle": "challenge"
+      },
+      {
+        "text": "从历史看，新技术总伴随劳动反抗形式创新——零工经济是否可能催生数字化罢工等新斗争方式？",
+        "angle": "relate"
+      },
+      {
+        "text": "总结您的观点：平台垄断生产资料是核心问题，而工人自组织是破局关键。",
+        "angle": "synthesize"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  },
+  "3c02871dd6df73760f0fb145": {
+    "suggestions": [
+      {
+        "text": "我想讨论工业革命时期工人阶级的生存状况，这如何体现生产力与生产关系的矛盾？",
+        "angle": "ask-example"
+      },
+      {
+        "text": "你强调历史现实的具体性，那么请分析当前数字经济的生产关系本质。",
+        "angle": "challenge"
+      },
+      {
+        "text": "沉默确实能揭示矛盾，但实践更需要言语的引导——我建议聚焦殖民主义的经济基础影响。",
+        "angle": "propose"
+      },
+      {
+        "text": "从辩证角度看，你的沉默本身是否属于上层建筑对经济基础的被动反映？",
+        "angle": "contrast"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  },
+  "c8a6e773e04bd23553cdb3c9": {
+    "suggestions": [
+      {
+        "text": "能否举一个具体工厂的例子来说明这种矛盾如何在实际中激化？",
+        "angle": "ask-example"
+      },
+      {
+        "text": "这种矛盾不仅存在于工业革命，现代科技发展下的零工经济也呈现出类似的生产关系异化。",
+        "angle": "relate"
+      },
+      {
+        "text": "资产阶级通过控制国家机器强化剥削，而上层建筑如何进一步加剧了无产阶级的困境？",
+        "angle": "contrast"
+      },
+      {
+        "text": "工人阶级的集体觉醒与罢工斗争是生产力倒逼生产关系变革的直接体现，这是历史唯物主义的必然进程。",
+        "angle": "synthesize"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  },
+  "92ea22a036907463abcf45da": {
+    "suggestions": [
+      {
+        "text": "请具体说明工人阶级从'自在'到'自为'转变的关键历史节点。",
+        "angle": "ask-example"
+      },
+      {
+        "text": "这种觉醒是否在当代全球化生产中仍有类似表现？",
+        "angle": "relate"
+      },
+      {
+        "text": "资产阶级如何通过意识形态上层建筑延缓这种必然进程？",
+        "angle": "contrast"
+      },
+      {
+        "text": "我们必须认识到，阶级意识的形成始终受制于物质生产条件的辩证发展。",
+        "angle": "synthesize"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  },
+  "561c44147a59d992e35403a4": {
+    "suggestions": [
+      {
+        "text": "您能否具体说明当前讨论的工人阶级困境涉及哪些生产领域？",
+        "angle": "clarify"
+      },
+      {
+        "text": "以英国纺织业为例，技术革新如何加剧工人剥削？ 《资本论》中可能有相关分析。",
+        "angle": "ask-example"
+      },
+      {
+        "text": "家庭结构的变化本质上反映了资本对劳动力再生产的需求，我们可以从殖民地剥削模式中找到相似逻辑。",
+        "angle": "relate"
+      },
+      {
+        "text": "建议组织工人合作社：通过集体所有制直接对抗资本异化，巴黎公社的实践经验值得参考。",
+        "angle": "propose"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  },
+  "24a54c52e8493cfe727617f9": {
+    "suggestions": [
+      {
+        "text": "宪章运动之后，工人阶级的政治斗争如何具体影响了19世纪欧洲的生产关系调整？",
+        "angle": "ask-example"
+      },
+      {
+        "text": "从历史唯物主义角度看，工人阶级的'自为'转变本质上是由机器大工业带来的集中化生产所决定的。",
+        "angle": "synthesize"
+      },
+      {
+        "text": "与宪章运动相比，巴黎公社是否更能体现'自为阶级'在夺取政权层面的辩证飞跃？",
+        "angle": "contrast"
+      },
+      {
+        "text": "建议进一步分析《资本论》中关于工厂立法与工作日斗争的论述，这直接揭示了经济基础与上层建筑的相互作用。",
+        "angle": "propose"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  },
+  "cb5a026b0811846871074d7e": {
+    "suggestions": [
+      {
+        "text": "能否举例说明当代数字平台经济如何影响工人的集中与组织化？",
+        "angle": "ask-example"
+      },
+      {
+        "text": "我认同这一分析，并建议进一步探讨技术自动化对工人阶级意识的双重作用。",
+        "angle": "propose"
+      },
+      {
+        "text": "这与小农经济分散生产下的阶级形成有何根本区别？",
+        "angle": "contrast"
+      },
+      {
+        "text": "我们可以总结：生产方式的变革始终是阶级意识发展的物质基础。",
+        "angle": "synthesize"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  },
+  "eb432fe25d4a93e6bf01723b": {
+    "suggestions": [
+      {
+        "text": "能否举例说明机器大工业如何具体促成不同地区工人的联合？",
+        "angle": "ask-example"
+      },
+      {
+        "text": "这种集中化生产对当代零工经济中的工人意识形成有何启示？",
+        "angle": "relate"
+      },
+      {
+        "text": "小农经济的分散性是否完全阻碍了阶级意识的形成？",
+        "angle": "challenge"
+      },
+      {
+        "text": "总结来说，生产方式的集中是工人阶级从'自在'转向'自为'的物质基础。",
+        "angle": "synthesize"
+      }
+    ],
+    "meta": {
+      "model": "deepseek-chat",
+      "promptVersion": 1,
+      "cached": true
+    }
+  }
+}

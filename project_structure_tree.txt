@@ -1,0 +1,24 @@
+项目根目录/
+├── backend/                  # 后端核心代码目录（FastAPI 服务）
+│   ├── __init__.py           # Python 包标识文件（空文件，用于模块导入）
+│   ├── main.py               # FastAPI 入口文件：初始化应用、挂载路由、配置静态资源（关联 static/ 目录）
+│   ├── config.py             # 配置管理：读取 .env 环境变量，暴露 Settings 类（含 LLM 地址/密钥/模型、数据目录、端口等）
+│   ├── schemas.py            # 数据模型定义：基于 Pydantic 定义 Message/Conversation 等结构体，规范请求/响应格式
+│   ├── llm_client.py         # LLM 调用客户端：封装 httpx 请求，实现 OpenAI 兼容的 Chat Completions 接口调用
+│   ├── storage.py            # 本地存储逻辑：实现 JSON 文件的原子写入、文件锁机制，处理会话/消息的持久化
+│   └── routes/               # 后端路由目录（拆分不同功能接口）
+│       ├── __init__.py       # 路由包标识文件（可在此统一导出路由模块）
+│       ├── conversations.py  # 会话管理接口：提供会话列表查询、创建、重命名、删除、消息获取等接口
+│       └── chat.py           # 聊天交互接口：处理用户消息发送（流程：落库用户消息→调用 LLM→落库助手消息→返回结果）
+├── static/                   # 前端静态资源目录（极简 UI）
+│   ├── index.html            # 前端页面：包含会话列表、聊天窗口的 HTML 结构
+│   ├── app.js                # 前端交互逻辑：调用后端 API、渲染会话列表与聊天消息、处理用户操作
+│   └── styles.css            # 前端样式：定义页面布局、字体、颜色等基础样式
+├── data/                     # 运行期数据持久化目录（本地存储，自动生成/维护）
+│   ├── index.json            # 会话索引文件：存储所有会话的元信息，格式 [{id, title, createdAt, updatedAt}]
+│   └── conversations/        # 单个会话详情目录（按会话 UUID 命名文件）
+│       └── <uuid>.json       # 单会话全量数据：存储会话 ID、标题、时间戳及消息列表，格式 {id, title, createdAt, updatedAt, messages:[{role, content, ts}]}
+├── .env.example              # 环境变量示例文件：提供 LLM_BASE_URL/KEY/MODEL、DATA_DIR、PORT 等配置的模板（需复制为 .env 后使用）
+├── requirements.txt          # 项目依赖清单：记录 FastAPI、uvicorn、httpx、python-dotenv、filelock 等依赖包及版本
+└── README.md                 # 项目说明文档：含项目功能、环境配置、启动步骤、接口说明等指引
+
