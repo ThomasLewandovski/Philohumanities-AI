@@ -2,3 +2,8 @@
 __pycache__/
 # 本地历史记录
 data/
+
+# 本地环境变量与系统文件
+.env
+.env.*
+.DS_Store
