@@ -52,3 +52,5 @@ Next Steps (optional)
 - Add streaming responses (SSE or fetch streaming) to show token-by-token output.
 - Switch localStorage to IndexedDB for very long histories.
 - Add RAG, prompt templates, or model switcher UI.
+- A few bugs tobe fixed.
+- UI
