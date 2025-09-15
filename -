@@ -35,6 +35,7 @@ body {
 .container {
   flex: 1 1 auto;
   min-width: 90%;
+  min-height: 90%;
   display: block;
   max-width: none;
   margin: 0;
@@ -106,7 +107,7 @@ body {
   position: relative;
   width: 20%;
   min-height: 70vh;
-  /* 给个最小高度，让侧边栏更明显 */
+  /* 给个最小高度，让侧边栏更明�?*/
   transition: width 0.3s ease;
   /* 更平滑的过渡 */
   background: var(--panel);
@@ -114,10 +115,9 @@ body {
   border-radius: 8px;
   padding: 8px;
   box-sizing: border-box;
-  /* 确保padding不会增加总宽度 */
+  /* 确保padding不会增加总宽�?*/
   color: var(--text);
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: visible;
 }
 
 .sidebar.collapsed {
@@ -127,7 +127,7 @@ body {
 
 }
 
-/* 侧边栏项目样式 */
+/* 侧边栏项目样�?*/
 .sidebar-item {
   display: flex;
   align-items: center;
@@ -135,6 +135,7 @@ body {
   border-radius: 4px;
   margin-bottom: 4px;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
 .sidebar-item:hover {
@@ -151,22 +152,23 @@ body {
 }
 
 
-.toggle-sidebar-btn {
-  align-self: center;
-  width: 28px;
-  height: 48px;
-  background: #c4c4c4;
-  color: var(--fg);
-  border: 1px solid #9fa4ad;
-  border-left: none;
-  border-radius: 0 8px 8px 0;
+#toggleSidebar {
+  position: absolute;
+  right: -15px;
+  /* 保持一半在侧边栏外 */
+  top: 20px;
+  width: 30px;
+  height: 30px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 50%;
   cursor: pointer;
+  z-index: 10;
+  /* 确保在其他元素上�?*/
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: -25px; 
 }
-
 
 
 .sidebar h2 {
@@ -314,10 +316,6 @@ body {
 .suggestions-panel.hidden {
   display: none;
 }
-
-/* Group controls */
-.group-controls { display: flex; gap: 8px; align-items: center; padding: 8px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.group-controls.hidden { display: none; }
 
 .footer {
   margin-top: 12px;
