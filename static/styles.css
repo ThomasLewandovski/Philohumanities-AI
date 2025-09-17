@@ -119,8 +119,8 @@ body {
   color: var(--text);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-gutter: stable;
 }
 
