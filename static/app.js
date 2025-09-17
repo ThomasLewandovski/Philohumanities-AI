@@ -1,4 +1,5 @@
 (() => {
+  console.log('[app] frontend script booting');
   const API_BASE = '';
 
   // DOM elements
@@ -17,6 +18,15 @@
   const $wantSpeakBtn = document.getElementById('wantSpeakBtn');
   const $pauseBtn = document.getElementById('pauseBtn');
 
+  if ($wantSpeakBtn) {
+    $wantSpeakBtn.classList.add('group-toggle-btn');
+    $wantSpeakBtn.classList.remove('secondary');
+  }
+  if ($pauseBtn) {
+    $pauseBtn.classList.add('group-toggle-btn');
+    $pauseBtn.classList.remove('secondary');
+  }
+
   let conversations = [];
   let activeId = null; // single chat id
   let groupConversations = [];
@@ -33,11 +43,19 @@
       if (isGroupMode) $groupControls.classList.remove('hidden'); else $groupControls.classList.add('hidden');
     }
     if ($autoRunBtn) $autoRunBtn.textContent = `自动续聊：${autoRun ? '开' : '关'}`;
-    if ($pauseBtn) $pauseBtn.textContent = paused ? '继续' : '暂停';
+    if ($wantSpeakBtn) {
+      $wantSpeakBtn.classList.toggle('group-toggle-btn--pending', wantSpeak);
+    }
+    if ($pauseBtn) {
+      $pauseBtn.textContent = paused ? '继续' : '暂停';
+      $pauseBtn.classList.toggle('group-toggle-btn--paused', paused);
+    }
     // 小智囊仅在私聊启用
     if ($suggestBtn) {
-      $suggestBtn.disabled = isGroupMode;
-      $suggestBtn.title = isGroupMode ? 'AI小智囊仅用于私聊' : 'AI小智囊';
+      const groupDisabled = !!isGroupMode;
+      $suggestBtn.disabled = false;
+      $suggestBtn.classList.toggle('soft-disabled', groupDisabled);
+      $suggestBtn.title = groupDisabled ? 'AI小智囊仅用于私聊' : 'AI小智囊';
     }
   }
 
@@ -162,8 +180,12 @@
     } catch (e) {
       console.error('groupRunLoop error', e);
     } finally {
+      const wasManual = wantSpeak;
       groupInFlight = false;
-      if (wantSpeak) { wantSpeak = false; $input && $input.focus(); updateGroupControlsUI(); return; }
+      if (wasManual) {
+        wantSpeak = false;
+        updateGroupControlsUI();
+      }
       if (!paused && autoRun) setTimeout(groupRunLoop, 200);
     }
   }
@@ -282,7 +304,16 @@
       const sendBtn = document.createElement('button');
       sendBtn.setAttribute('type','button');
       sendBtn.textContent = '一键发送';
-      sendBtn.onclick = (ev) => { ev && ev.preventDefault && ev.preventDefault(); ev && ev.stopPropagation && ev.stopPropagation(); clearSuggestions(); handleSend(sug.text); };
+      sendBtn.onclick = (ev) => {
+        ev && ev.preventDefault && ev.preventDefault();
+        ev && ev.stopPropagation && ev.stopPropagation();
+        clearSuggestions();
+        if (isGroupMode) {
+          groupHandleSend(sug.text);
+        } else {
+          handleSend(sug.text);
+        }
+      };
       const useBtn = document.createElement('button');
       useBtn.setAttribute('type','button');
       useBtn.textContent = '填入输入框';
@@ -318,19 +349,24 @@
     console.error(err);
     alert('加载失败，请检查后端是否启动');
   });
+  loadGroupConversations().catch((err) => console.error('loadGroupConversations', err));
   updateGroupControlsUI();
 
   async function loadGroupConversations() {
     try {
+      console.log('[group] loadGroupConversations: fetching list…');
       groupConversations = await fetchJSON('/api/group-conversations');
+      console.log('[group] loadGroupConversations: fetched', Array.isArray(groupConversations) ? groupConversations.length : groupConversations);
       renderGroupConversations();
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error('[group] loadGroupConversations error', e); }
   }
 
   function renderGroupConversations() {
     const $list = document.getElementById('multiconversationList');
     if (!$list) return;
     $list.innerHTML = '';
+    const rows = groupConversations || [];
+    console.log('[group] renderGroupConversations: rendering', rows.length, 'items');
     (groupConversations||[]).forEach(g => {
       const li = document.createElement('li');
       li.textContent = g.title || g.id;
@@ -403,8 +439,12 @@
     } catch (e) {
       alert('群聊生成失败: ' + (e.message || e));
     } finally {
+      const wasManual = wantSpeak;
       groupInFlight = false;
-      if (wantSpeak) { wantSpeak = false; $input && $input.focus(); updateGroupControlsUI(); return; }
+      if (wasManual) {
+        wantSpeak = false;
+        updateGroupControlsUI();
+      }
       if (!paused && autoRun) setTimeout(groupRunLoop, 200);
     }
   }
@@ -421,7 +461,8 @@
   const singleChatBtn2 = document.getElementById('singleChatBtn');
   const multi_panel2 = document.getElementById('multi-panel');
   const single_panel2 = document.getElementById('single-panel');
-  multiChatBtn2.onclick = function() {
+  multiChatBtn2.addEventListener('click', () => {
+    console.log('[group] top tab click handler triggered');
     multi_panel2.style.display = '';
     single_panel2.style.display = 'none';
     multiChatBtn2.classList.add('active');
@@ -432,8 +473,8 @@
     updateGroupControlsUI();
     // 开启自动续聊
     if (autoRun && !paused) setTimeout(groupRunLoop, 200);
-  };
-  singleChatBtn2.onclick = function() {
+  });
+  singleChatBtn2.addEventListener('click', () => {
     multi_panel2.style.display = 'none';
     single_panel2.style.display = '';
     singleChatBtn2.classList.add('active');
@@ -442,7 +483,7 @@
     activeGroupId = null;
     renderMessages();
     updateGroupControlsUI();
-  };
+  });
 
   // Group controls events
   if ($autoRunBtn) $autoRunBtn.onclick = () => { autoRun = !autoRun; updateGroupControlsUI(); if (autoRun && !paused && !groupInFlight) groupRunLoop(); };
@@ -473,11 +514,15 @@ const chatmian = document.getElementById('chat-main');
 const single_panel_title = document.getElementById('single-title');
 const multi_panel_title = document.getElementById('multi-title');
 
-multiChatBtn.onclick = function() {
+  multiChatBtn.onclick = function() {
+  console.log('[group] bottom tab click handler triggered');
   multi_panel.style.display = '';
   single_panel.style.display = 'none';
   multiChatBtn.classList.add('active');
   singleChatBtn.classList.remove('active');
+  if (window.__groupAPI && typeof window.__groupAPI.loadConversations === 'function') {
+    window.__groupAPI.loadConversations().catch((err) => console.error('[group] bottom tab load error', err));
+  }
 };
 singleChatBtn.onclick = function() {
   multi_panel.style.display = 'none';

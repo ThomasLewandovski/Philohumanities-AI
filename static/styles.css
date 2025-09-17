@@ -102,6 +102,7 @@ body {
   display: inline-block;
 }
 
+
 .sidebar {
   position: relative;
   width: 20%;
@@ -116,13 +117,16 @@ body {
   box-sizing: border-box;
   /* 确保padding不会增加总宽度 */
   color: var(--text);
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
 }
 
 .sidebar.collapsed {
   width: 5%;
-  overflow: visible;
+  overflow: hidden;
   padding: 8px 0;
 
 }
@@ -175,6 +179,7 @@ body {
   color: var(--muted);
 }
 
+
 .sidebar ul {
   list-style: none;
   padding: 0;
@@ -195,6 +200,34 @@ body {
 
 .sidebar li:hover {
   background: rgba(59, 130, 246, 0.08);
+}
+
+#button-div {
+  flex-shrink: 0;
+}
+
+#single-panel,
+#multi-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#singleconversationList,
+#multiconversationList {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  max-height: calc(70vh - 140px);
+  padding-right: 4px;
+}
+
+#multi-history-list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
 }
 
 #chat-main {
@@ -282,6 +315,10 @@ body {
   cursor: pointer;
 }
 
+.composer-actions button.soft-disabled {
+  opacity: 0.6;
+}
+
 .suggestions-panel {
   margin: 8px;
   display: grid;
@@ -318,6 +355,9 @@ body {
 /* Group controls */
 .group-controls { display: flex; gap: 8px; align-items: center; padding: 8px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .group-controls.hidden { display: none; }
+.group-controls button.group-toggle-btn { background: var(--accent); border: 1px solid var(--accent); color: #fff; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+.group-controls button.group-toggle-btn.group-toggle-btn--pending { background: var(--muted); border-color: var(--muted); color: #fff; }
+.group-controls button.group-toggle-btn.group-toggle-btn--paused { background: #fff; color: var(--accent); border-color: var(--accent); }
 
 .footer {
   margin-top: 12px;
