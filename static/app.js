@@ -245,17 +245,29 @@
   // 新会话：打开类型选择弹窗
   $newChatBtn.onclick = () => openTypeModal();
 
-  $clearChatBtn.onclick = () => {
-    if (!activeId) return;
-    if (!confirm('确定要删除当前会话吗？该操作不可恢复。')) return;
-    fetchJSON(`/api/conversations/${activeId}`, { method: 'DELETE' })
-      .then(() => {
-        activeId = null;
-        window.__msgs = [];
-        loadSingleConversations().then(loadMessages);
-      })
-      .catch((err) => alert('删除失败: ' + (err.message || err)));
-  };
+  $clearChatBtn.onclick = async () => {
+  if (!activeId) return;
+  if (!confirm('确定要删除当前会话吗？该操作不可恢复。')) return;
+
+  try {
+    const res = await fetch(`/api/conversations/${encodeURIComponent(activeId)}`, {
+      method: 'DELETE',
+    });
+
+    if (!res.ok) {
+      const msg = await res.text().catch(() => '');
+      throw new Error(msg || res.statusText || '删除失败');
+    }
+
+    // 成功后更新 UI
+    activeId = null;
+    window.__msgs = [];
+    await loadSingleConversations();
+    await loadMessages();
+  } catch (err) {
+    alert('删除失败: ' + (err?.message || err));
+  }
+};
 
   // AI小智囊：生成建议
   $suggestBtn.onclick = async () => {
