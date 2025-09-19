@@ -8,16 +8,16 @@
 - 角色卡接口：`/api/role-cards`（列表、详情），供前端展示与选择角色。
 - 会话与消息：创建会话时自动将角色 persona 写入首条 `system` 消息；消息保存在 `data/conversations/*.json`。
 - 聊天协议：SSE（服务端将 LLM 非流式回复切块成事件流）。
-- LLM：通过 `backend/llm_client.py` 调用 OpenAI 兼容 `/v1/chat/completions`。
+- LLM：通过 `backend/core/llm/client.py` 调用 OpenAI 兼容 `/v1/chat/completions`。
 
 目录要点：
 
-- `backend/role_cards.py`：角色卡加载器（从 `backend/prompts` 读取）。
-- `backend/routes/roles.py`：角色卡 API（列表/详情）。
-- `backend/routes/role_chat.py`：基于角色的会话创建与 SSE 聊天。
-- `backend/generation.py`：`OpenAICompatProvider`（调用 LLM，服务端切块输出）。
-- `backend/storage.py`：JSON 文件存储会话与消息。
-- `backend/config.py`：读取环境变量，强制检查 LLM 配置。
+- `backend/core/roles/registry.py`：角色卡加载器（从 `backend/prompts` 读取）。
+- `backend/api/roles.py`：角色卡 API（列表/详情）。
+- `backend/api/role_chat.py`：基于角色的会话创建与 SSE 聊天。
+- `backend/core/llm/streams.py`：`OpenAICompatProvider`（调用 LLM，服务端切块输出）。
+- `backend/core/conversations/repository.py`：JSON 文件存储会话与消息。
+- `backend/core/settings.py`：读取环境变量，强制检查 LLM 配置。
 - `backend/prompts/*.json`：角色卡配置文件（人工新增角色就在这里）。
 
 ## 二、环境配置
@@ -148,4 +148,3 @@
 - 角色卡版本化：将 prompts 迁移到数据库/配置中心，支持灰度发布与 A/B 测试。
 
 —— 完 ——
-
