@@ -1,150 +1,142 @@
-# 角色卡后端对接与新增流程指南
+角色卡全攻略：从零开始到私聊、群聊完全联动
 
-本指南面向前端与后端同事，说明：如何对接“角色卡”接口、如何发起基于角色的 SSE 聊天，以及纯人工新增一个新角色的完整流程。后端已移除本地模拟逻辑，必须配置真实 LLM（OpenAI 兼容接口）方可使用。
+面向第一次接触本项目的同学。只要照着本文操作，就能把一个全新的角色卡无缝接入个人会话和群聊功能。
 
-## 一、系统概览
+--------------------------------------------------
 
-- 角色卡来源：`backend/prompts/*.json`（一角一卡，数据化配置）。
-- 角色卡接口：`/api/role-cards`（列表、详情），供前端展示与选择角色。
-- 会话与消息：创建会话时自动将角色 persona 写入首条 `system` 消息；消息保存在 `data/conversations/*.json`。
-- 聊天协议：SSE（服务端将 LLM 非流式回复切块成事件流）。
-- LLM：通过 `backend/core/llm/client.py` 调用 OpenAI 兼容 `/v1/chat/completions`。
+1. 核心概念
 
-目录要点：
+角色卡（Role Card）存放在 backend/prompts/ 目录下的 JSON 文件中，用来定义人物设定（人格、语气、招呼语等）。
+私聊（角色对话）通过 /api/role-conversations 和 /api/role-conversations/{cid}/assistant/stream 提供的一对一会话，新会话会把角色卡写入首条 system 消息。
+群聊通过 /api/group-conversations 等接口创建多角色对话室，请求体里的每个参与者需要引用某个 roleCardId。
+后端加载逻辑在 backend/core/roles/registry.py，会扫描 backend/prompts/*.json 并把所有合法角色提供给 API。
+只要角色卡文件存在且格式正确，私聊与群聊接口都会立即识别到它。
 
-- `backend/core/roles/registry.py`：角色卡加载器（从 `backend/prompts` 读取）。
-- `backend/api/roles.py`：角色卡 API（列表/详情）。
-- `backend/api/role_chat.py`：基于角色的会话创建与 SSE 聊天。
-- `backend/core/llm/streams.py`：`OpenAICompatProvider`（调用 LLM，服务端切块输出）。
-- `backend/core/conversations/repository.py`：JSON 文件存储会话与消息。
-- `backend/core/settings.py`：读取环境变量，强制检查 LLM 配置。
-- `backend/prompts/*.json`：角色卡配置文件（人工新增角色就在这里）。
+--------------------------------------------------
 
-## 二、环境配置
+2. 开始前的准备
 
-在项目根目录 `.env`（或环境变量）中配置：
+确认环境变量（.env 或系统环境）：
+LLM_BASE_URL 与 LLM_MODEL 必填，LLM_API_KEY 在网关鉴权时必填，DATA_DIR 可选（默认 ./data）。
+在仓库根目录执行 uvicorn backend.main:app --reload --port 3000 启动后端。
+浏览器访问 http://127.0.0.1:3000/health 返回 {"status":"ok"} 代表服务正常。
 
-- `LLM_BASE_URL`：OpenAI 兼容网关地址（如 `http://localhost:8001`）。
-- `LLM_MODEL`：模型名（如 `gpt-4o-mini`、`llama3`、`qwen2` 等，视网关支持）。
-- `LLM_API_KEY`：若网关需要认证，填入即可；否则可留空。
-- `DATA_DIR`（可选）：对话存储目录，默认 `./data`。
-- `ALLOW_ORIGINS`（可选）：CORS 白名单，逗号分隔。
+--------------------------------------------------
 
-启动：`uvicorn backend.main:app --reload`
+3. 手把手创建第一个角色卡
 
-## 三、API 契约（对前端）
+步骤一：挑一个唯一的 slug。建议使用无空格英文，例如 Socrates。文件名必须与 slug 相同，如 backend/prompts/Socrates.json。
 
-1) 列出角色卡
+步骤二：填写 JSON 内容。
+必填字段：
+name  展示名，例如 苏格拉底。
+prompt  LLM 的 system 提示，用于定义身份、边界、拒答策略。
+可选字段：
+style  语气或写作风格提示，会附加到 system prompt。
+greeting  建议发送给用户的第一句招呼语。
+locales  支持的语言列表，默认 ['zh-CN']。
 
-- `GET /api/role-cards`
-- 响应示例：
-  ```json
-  [
-    {"id":"Marx","slug":"Marx","name":"马克思","locales":["zh-CN"],"tags":[]},
-    {"id":"Engels","slug":"Engels","name":"恩格斯","locales":["zh-CN"],"tags":[]}
-  ]
-  ```
-
-2) 角色卡详情（可选）
-
-- `GET /api/role-cards/{slug}`
-- 响应示例：
-  ```json
-  {"id":"Marx","slug":"Marx","name":"马克思","styleHints":"...","greeting":"...","locales":["zh-CN"]}
-  ```
-
-3) 创建角色会话
-
-- `POST /api/role-conversations`
-- 请求体：`{ "roleCardId": "Marx", "title": "与马克思的对话" }`
-- 响应：`{ conversationId, title, roleCardId, roleCardName, createdAt }`
-
-4) 角色聊天（SSE）
-
-- `POST /api/role-conversations/{conversationId}/assistant/stream`
-- 请求体：`{ "roleCardId": "Marx", "text": "如何理解异化劳动？", "temperature": 0.7, "max_tokens": 300 }`
-- 响应：`text/event-stream`（SSE 事件顺序）
-  - `status.start`：`{ conversationId, roleCardId, model: "openai-compatible", promptVersion }`
-  - `message.created`：`{ messageId, state: "generating" }`
-  - 多次 `message.delta`：`{ messageId, delta }`
-  - `message.completed`：`{ messageId, usage, finishReason }`
-  - `done`
-- 错误：`error`（`{ code, message }`），随后关闭连接。
-
-5) 获取会话历史（可选）
-
-- `GET /api/conversations/{conversationId}/messages`
-- 返回：该会话的全部 `system/user/assistant` 消息列表。
-
-前端建议：使用 `EventSource` 监听 `message.delta` 逐字渲染；`message.completed` 固定消息，展示 `usage`/`finishReason`；`done` 结束本次流。
-
-## 四、纯人工新增角色流程
-
-目标：在前端“角色列表”出现新角色，并可基于该角色发起会话与聊天。
-
-1) 新增角色文件
-
-- 在 `backend/prompts/` 下创建 `<Slug>.json`，`<Slug>` 即角色 id（建议英文无空格，如 `Socrates.json`）。
-
-2) 填写字段
-
-- 必填：
-  - `name`：展示名（如“苏格拉底”）。
-  - `prompt`：system 提示词，明确身份、方法、主题范围、拒答策略（如敏感领域仅给一般原则并提示求助专业人士）。
-- 可选：
-  - `style`：风格提示（语气、结构、措辞习惯）。
-  - `greeting`：建议的首句招呼语（前端可直接展示）。
-  - `locales`：可用语言列表（如 `["zh-CN"]`）。
-
-3) 示例（可直接拷贝修改）
-
-```json
+示例 JSON：
 {
   "name": "苏格拉底",
-  "prompt": "你是苏格拉底，以问答法澄清概念与前提，鼓励自我反思。涉及医学/法律建议时，仅提供一般原则并提示寻求专业帮助。",
-  "style": "语气温和、以问题引导、逐步澄清定义与矛盾。",
-  "greeting": "我们先从一个定义开始：你如何理解‘善’？",
+  "prompt": "你是苏格拉底，以苏格拉底式问答帮助对方澄清概念和前提。在涉及医学或法律时只提供一般原则，并建议咨询专业人士。",
+  "style": "语气温和、问题驱动、循序渐进地拆解概念。",
+  "greeting": "我们从一个定义开始：你如何理解‘善’？",
   "locales": ["zh-CN"]
 }
-```
 
-4) 自测与联调
+步骤三：保存文件。后端无需重启，RoleCardRegistry 会在下一次请求时自动重新扫描。
 
-- 列表：`GET /api/role-cards` 应出现新 `slug/name`。
-- 详情：`GET /api/role-cards/<Slug>` 应返回 `styleHints/greeting/locales`。
-- 创建会话：`POST /api/role-conversations`，body `{ "roleCardId": "<Slug>" }`，返回 `conversationId`。
-- SSE 聊天：`POST /api/role-conversations/{cid}/assistant/stream`，body `{ "roleCardId": "<Slug>", "text": "你的问题..." }`。
-- 历史：`GET /api/conversations/{cid}/messages` 回放 system/user/assistant。
+--------------------------------------------------
 
-5) 质量清单（建议）
+4. 验证私聊流程
 
-- Persona 清晰：身份/方法/范围/边界一段话内说清楚。
-- 风格稳定：`style` 简洁明确（语气、结构、引用习惯）。
-- 安全边界：敏感领域给出拒答或降级策略。
-- 语言一致：确认 `locales` 与 prompt 语言一致。
+确认角色已加载：
+curl http://127.0.0.1:3000/api/role-cards | jq
+输出数组中应包含你的 slug。如果没有出现，检查 JSON 是否有效、文件名是否正确。
 
-## 五、联调流程（前端）
+创建角色会话：
+curl -X POST http://127.0.0.1:3000/api/role-conversations \
+  -H 'Content-Type: application/json' \
+  -d '{"roleCardId":"Socrates","title":"与苏格拉底聊天"}'
+响应会返回 conversationId，后续聊天依赖它。
 
-1) 角色选择页：`GET /api/role-cards` → 展示卡片（使用 `slug` 作为 id）。
-2) 进入角色：`POST /api/role-conversations` → 返回 `conversationId`。
-3) 开始聊天：`POST /api/role-conversations/{conversationId}/assistant/stream`（SSE）。
-4) 渲染事件：
-   - `status.start` → 显示“正在思考”。
-   - `message.delta` → 逐字追加文本。
-   - `message.completed` → 固定消息、展示 `usage/finishReason`。
-   - `done` → 结束本轮。
-5) （可选）历史：`GET /api/conversations/{conversationId}/messages` 回放。
+开启 SSE 聊天：
+curl -N -X POST http://127.0.0.1:3000/api/role-conversations/<conversationId>/assistant/stream \
+  -H 'Content-Type: application/json' \
+  -d '{"roleCardId":"Socrates","text":"什么是正义？"}'
+你会看到 event: status.start、若干条 message.delta，以及 event: done。前端通常使用 EventSource 监听并渲染这些事件。
 
-## 六、常见问题
+查看会话历史（可选）：
+curl http://127.0.0.1:3000/api/conversations/<conversationId>/messages
+首条消息应该是 system（即你的角色卡 prompt），之后是用户输入和助手回答。
 
-- 500/配置错误：确认 `.env` 中 `LLM_BASE_URL`、`LLM_MODEL`（和 `LLM_API_KEY`）已设置且网关可访问。
-- 404/角色不存在：检查文件名 `<Slug>.json` 与请求中的 `roleCardId` 是否一致；JSON 至少要有 `name` 和 `prompt`。
-- SSE 无显示：确认使用 `EventSource` 或正确处理 `text/event-stream`；检查浏览器/代理是否截断 POST SSE。
+--------------------------------------------------
 
-## 七、扩展与规划（预留）
+5. 验证群聊流程
 
-- RAG：在请求侧检索片段，注入在 system 之后、user 之前的上下文；统一 `citation` 输出结构。
-- 多人群聊：扩展为多 Agent 并发发言（事件名可升级为 `agent.message.delta`），或引入主持人总结。
-- 角色卡版本化：将 prompts 迁移到数据库/配置中心，支持灰度发布与 A/B 测试。
+群聊允许多个角色共同参与。在创建群聊时把新角色的 roleCardId 填进去即可。
 
-—— 完 ——
+群聊请求体示例：
+{
+  "participants": [
+    {
+      "roleCardId": "Socrates",
+      "name": "苏老师",
+      "model": null,
+      "providerAlias": null
+    },
+    {
+      "roleCardId": "Marx",
+      "name": "小马克"
+    }
+  ],
+  "title": "思想圆桌"
+}
+
+创建群聊会话：
+curl -X POST http://127.0.0.1:3000/api/group-conversations \
+  -H 'Content-Type: application/json' \
+  -d @payload.json
+响应包含群聊 id，用于后续操作。
+
+可选：先插入一条用户消息：
+curl -X POST http://127.0.0.1:3000/api/group-conversations/<gid>/user \
+  -H 'Content-Type: application/json' \
+  -d '{"text":"请两位讨论正义的本质"}'
+如果略过这一步，系统会让角色根据历史自行决定话题。
+
+触发一轮群聊（SSE）：
+curl -N -X POST http://127.0.0.1:3000/api/group-conversations/<gid>/assistant/stream \
+  -H 'Content-Type: application/json' \
+  -d '{"text":null}'
+命令中的 -N 让 curl 保持流式输出。事件顺序通常是 status.start、judge.*、agent.message.created、多个 agent.message.delta、agent.message.completed、最后是 done。在 data/group/ 目录可以检查每轮生成的消息与裁判日志，以确认新角色已经参与发言。
+
+查看群聊详情：
+curl http://127.0.0.1:3000/api/group-conversations/<gid>
+返回结果中的 participants 会列出所有角色，messages 中能看到每轮发言及 agentId。
+
+--------------------------------------------------
+
+6. 常用排查与 QA 清单
+
+GET /api/role-cards 没有出现新角色：检查 JSON 语法是否正确，文件名是否等于 slug，保存位置是否为 backend/prompts/。
+创建会话返回 404：确认请求体中的 roleCardId 与文件名一致，并注意大小写。
+SSE 无响应或立即结束：确认 LLM 服务可用，检查 LLM_BASE_URL 和 LLM_MODEL 是否正确，查看后端日志是否有 502。
+群聊内角色不发言：确认 participants 中正确引用 roleCardId，providerAlias 指向的 Provider 是否存在。
+角色口吻与预期不符：调整 prompt 和 style，明确语调、句式、引用习惯等细节。
+
+建议为重要角色编写简单的冒烟测试，例如固定提问“请简介你的身份”，以验证 persona 是否生效。
+
+--------------------------------------------------
+
+7. 进阶方向
+
+批量角色管理：把 backend/prompts/ 纳入版本库或配置中心，并建立评审流程。
+多语言支持：在 locales 中列出语言列表，前端可按语言过滤。
+知识库联动：结合 /api/kb 系列接口，为角色预先绑定资料并在 prompt 中引用。
+安全审计：对敏感领域角色卡进行额外审阅，确保 prompt 明确拒答策略。
+
+--------------------------------------------------
+
+完成以上步骤后，你的新角色卡就可以同时用于私聊和群聊。如果遇到问题，先查看 uvicorn 控制台输出，再检查 data/ 目录下的持久化文件，根据上面的排查表逐项定位即可。
